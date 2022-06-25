@@ -12,10 +12,6 @@
         register: account_detail
       - debug:
           msg: "{{ account_detail.stdout_lines[3] }}"
-      # - name: become root user 
-      #   shell: sudo passwd root
-      #   shell: "{{ vmrootpassword[0] }}"
-      #   shell: "{{ vmrootpassword[0] }}" 
       - name: update root user password
         user: 
           name: root
