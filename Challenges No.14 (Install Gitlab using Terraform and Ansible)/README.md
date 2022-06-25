@@ -1,6 +1,6 @@
 # gitlab challenges #
 
-### This challenges is using Terraform and Ansible (IaC) to automate the [installation of GitLab on Microsoft Azure](https://docs.gitlab.com/ee/install/azure/)
+### This challenges is using Terraform and Ansible (IaC) to automate the [installation and configuration of GitLab on Microsoft Azure](https://docs.gitlab.com/ee/install/azure/)
 
 ## Tools that require before we started: :white_check_mark:
 
