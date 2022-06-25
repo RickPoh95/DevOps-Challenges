@@ -47,7 +47,7 @@
 <p align="center">
   <img src="./Photo/gitlab%20webpage.png" width="350" title="unsecure">
 
-11. Use Ansible to automate the file configuration with `main.yml` and the supporting document --> `publicip` & `password` to get the GitLab username and Password, Adding DNS + register SSL for the webpage with the following comment: 
+11. Use Ansible to automate the file configuration with `main.yml` and the supporting document --> `publicip` & `password` to get the GitLab username and password, adding DNS + register SSL for the webpage with the following comment: 
 ```
   ansible-playbook main.yml -u <vm_admin_user_name> -e "{target:<vm_publicip>}" -k  -i <vm_publicip>,
 ```
@@ -72,7 +72,7 @@
 
 ### Note
 
-* Terraform code was reference from the json code that exported from Azure Platform
+* Terraform code was reference from the json code (in ExportedTemplate-1-6da424f6-playground-sandbox foldere) that exported from Azure Platform
 
 
 
