@@ -1,7 +1,7 @@
 # DevOps-Challenges
 ## DevOps &amp; Cloud Support Bootcamp (Cohort 5) Challenges
 
-All this challenges is provided by our instructor to let us have a better understanding + hand-on experience on the tool that we learn during this 3 month Bootcamp. :muscle: :cloud:
+All this challenges is provided by our instructor to let us have a better understanding + hand-on experience on the tool that we learn during this 3 month Bootcamp. :muscle: 
 
 ### Below is the list of the challenges:
 
