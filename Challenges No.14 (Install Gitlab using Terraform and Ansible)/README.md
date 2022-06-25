@@ -2,7 +2,7 @@
 
 ### This challenges is using Terraform and Ansible (IaC) to automate the [installation of GitLab on Microsoft Azure](https://docs.gitlab.com/ee/install/azure/)
 
-## Tools that require before we started: ## :white_check_mark:
+## Tools that require before we started: :white_check_mark:
 
 * Linux Kernel (Ubuntu20.04),
 * Azure Sandbox,
