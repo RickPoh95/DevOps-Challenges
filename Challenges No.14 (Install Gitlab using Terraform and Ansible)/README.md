@@ -5,10 +5,10 @@
 ## Tools that require before we started: :white_check_mark:
 
 * Linux Kernel (Ubuntu20.04),
-* Azure Sandbox,
-* Azure CLI,
-* Terraform,
-* Ansible,
+* Azure Sandbox
+* Azure CLI
+* Terraform
+* Ansible
 * [sshpass](https://installati.one/ubuntu/20.04/sshpass/)
 * git
 
