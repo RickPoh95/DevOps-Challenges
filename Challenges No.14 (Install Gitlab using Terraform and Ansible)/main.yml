@@ -1,0 +1,45 @@
+---
+  - hosts: all
+    become: true
+    vars:
+      public_ip: ./publicip
+      var_ip: '{{ lookup("file", public_ip).splitlines() }}'
+      password_file: ./password
+      vmrootpassword: '{{ lookup("file", password_file).splitlines() }}'
+    tasks:
+      - name: retrieve bitnami root login credential to log in gitlab
+        shell: cat /home/bitnami/bitnami_credentials
+        register: account_detail
+      - debug:
+          msg: "{{ account_detail.stdout_lines[3] }}"
+      # - name: become root user 
+      #   shell: sudo passwd root
+      #   shell: "{{ vmrootpassword[0] }}"
+      #   shell: "{{ vmrootpassword[0] }}" 
+      - name: update root user password
+        user: 
+          name: root
+          update_password: always
+          password: "{{ vmrootpassword[0] }}"
+      - debug:
+          msg: "Root Password: {{ vmrootpassword[0] }}"
+      - name: gitlab.rb change ip to dns
+        ansible.builtin.replace:
+          path: /etc/gitlab/gitlab.rb
+          regexp: "external_url 'https://{{ var_ip[0] }}'"
+          replace: "external_url 'https://gitlab-prod.eastus.cloudapp.azure.com'"
+      - name: gitlab.rb configuration (setup SSL)
+        ansible.builtin.replace:
+          path: /etc/gitlab/gitlab.rb
+          regexp: "letsencrypt\\['enable'\\] = false"
+          replace: "letsencrypt['enable'] = true"
+      - name: gitlab.rb configuration (comment out nginx)
+        ansible.builtin.replace:
+          path: /etc/gitlab/gitlab.rb
+          regexp: "nginx"
+          replace: "#nginx"
+      - name: reconfigure gitlab
+        shell: sudo gitlab-ctl reconfigure
+ 
+    
+      
