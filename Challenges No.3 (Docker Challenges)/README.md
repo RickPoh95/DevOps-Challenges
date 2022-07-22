@@ -24,10 +24,10 @@ Please refer to this [docker images](https://hub.docker.com/repository/docker/ri
 
 Further reading: 
 
-What's a docker image https://www.tutorialspoint.com/docker/docker_images.htm
-What's a dockerfile: https://www.tutorialspoint.com/docker/docker_file.htm
-Atop https://www.cyberciti.biz/faq/centos-redhat-linux-install-atop-command-using-yum/
-Kubernetes vs docker https://www.geeksforgeeks.org/kubernetes-vs-docker/
+* [What's a docker image](https://www.tutorialspoint.com/docker/docker_images.htm)
+* [What's a dockerfile](https://www.tutorialspoint.com/docker/docker_file.htm)
+* [Atop https](//www.cyberciti.biz/faq/centos-redhat-linux-install-atop-command-using-yum/)
+* [Kubernetes vs docker](https://www.geeksforgeeks.org/kubernetes-vs-docker/)
 
 
 
