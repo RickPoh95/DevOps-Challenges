@@ -11,7 +11,7 @@ gmail_password = input("Type your password and press enter: ")
 message = MIMEMultipart("alternative")
 message["Subject"] = 'Testing Email sent via SMTP (With Attachment) - By Rick Poh'
 message["From"] = gmail_user
-message["To"] = 'shizchaw95@gmail.com'
+message["To"] = '<your_target_email>'
 
 # Create the plain-text and HTML version of your message
 
