@@ -1,0 +1,45 @@
+#create a repo (mkdir <FILENAME>) #create a repo to insert dockerfile
+#cd <FILENAME>
+#vim dockerfile (insert the following command line, the command to build the container environment with the images)
+#docker build . (build the docker images)
+#docker images  (check the available docker images)
+#docker container run <repo name> (will pull the images automatically from docker hub to build the container)
+#docker container run -it --name <container name> <images ID> (i for interactive, -t so that we can allocate a sudo TTY)(--name flag to name our container)(images ID can just show the first few characters)
+#exit (exit from container)
+#docker container ls -a (container that stop running)
+#docker container ls (check the active container)
+#docker container start <container ID> or <container name> (start and run the container)
+#docker attach <container ID> or <container name> (enter the container)
+#docker stop <container ID> or <container name> (stop the container)
+#docker rmi <image ID> (remove images)
+#docker container rm <container ID> or name (remove container, *must stop the container before you can remove)(can remove 2 or more at the same time by but the name or id side by side with space)
+#docker login (login to dockerhub to push or pull the images)
+#docker tag <images ID> <dockerusername>/<reponame>:<version> (rename the images)
+#docker push <dockerusername>/<reponame>:<version> (push the images to docker hub)
+#docker pull <dockerusername>/<reponame>:<version> (pull the images from docker hub)
+#docker image history <images name> or <images ID> (check the images history, the PORT number)
+#docker container inspect <container ID> | grep IPAdd (get the IP Address)
+#elinks <IPAddress>:<PORT no>
+#docker container run -d -P <container name> (open IP local port, random port assign --> the ephemeral port range,typically a port between 32768 and 61000)
+#docker container run -d -p 80:80 <container name> (assign the port to 80:80)
+
+FROM dorowu/ubuntu-desktop-lxde-vnc:latest
+EXPOSE 6080:80
+RUN sudo apt update
+RUN sudo apt-get install -y git 
+RUN sudo apt install -y nodejs npm 
+RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo bash - #change nodejs version to 16.15.0
+RUN sudo apt install -y nodejs
+RUN npm install --global yarn
+RUN npm install -g node-gyp
+RUN sudo apt-get install -y build-essential g++ libx11-dev libxkbfile-dev libsecret-1-dev python-is-python3
+RUN sudo apt-get install -y pkg-config
+RUN sudo apt-get install -y fakeroot rpm
+RUN git clone https://github.com/Microsoft/vscode.git
+WORKDIR /root/vscode
+RUN yarn
+WORKDIR /root/vscode/scripts/
+CMD ./code.sh --no-sandbox 
+	
+
+
