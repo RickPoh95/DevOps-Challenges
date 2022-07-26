@@ -39,7 +39,7 @@
 <p align="center">
   <img src="./Photo/insecure.png" width="450" title="private connection">
 
-9. Wait for 2-4 minute after you click the link and you will see the page shown:
+9. Wait for 2 - 4 minute after you click the link and you will see the page shown:
 <p align="center">
   <img src="./Photo/gitlab%20502.png" width="350" title="502">
 
