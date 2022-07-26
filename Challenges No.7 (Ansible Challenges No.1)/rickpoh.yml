@@ -1,0 +1,41 @@
+---
+  - hosts: localhost
+    tasks: 
+      - name: Add a Practice directory
+        ansible.builtin.file: 
+          path: ./Practice
+          state: directory
+          owner: rickpoh1214
+          group: rickpoh1214
+          mode: 774
+
+      - name: Add a Report directory
+        ansible.builtin.file: 
+          path: ./Report
+          state: directory
+          owner: rickpoh1214
+          group: rickpoh1214
+          mode: 774 
+
+      - name: create a file in Report
+        shell: touch ./Report/modification_1.py
+
+      - name: rename and move modification_1 to mounts.txt
+        shell: mv ./Report/modification_1.py ./Practice/mounts.txt
+
+      - name: copy the mount.txt to Report
+        copy:
+          src: ./Practice/mounts.txt
+          dest: ./Report/
+
+      - name: show Report directory
+        command: ls -la ./Report
+        register: check_Report_directory
+
+      - name: Debug Report directory contents
+        debug:
+          msg: "{{check_Report_directory}}"
+
+      
+
+
