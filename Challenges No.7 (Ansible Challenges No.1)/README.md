@@ -13,3 +13,12 @@
 5. Copy file (mount.txt) from directory (Practice) to directory (Report)
 6. List all the files including hidden files in directory (Report) and register --> 'check_Report_directory'
 7. Print the content in 'check_Report_directory'
+
+Further Reading:
+ 
+* [ansible.builtin.file module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html) 
+* [ansible.builtin.shell module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/shell_module.html)
+* [ansible.builtin.copy module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html)
+* [ansible.builtin.command module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html)
+* [ansible.builtin.debug module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/debug_module.html)
+
