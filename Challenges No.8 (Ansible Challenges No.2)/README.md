@@ -1,5 +1,5 @@
 ## Ansible-Challenges No.2 - Creating Users and Group from the Command Line using Ansible Playbook
-***********
+
 ## Create a Ansible Playbook to automate the process 
 
 * The purpose of this challenges is to create a ansible playbook to do the following tasks
