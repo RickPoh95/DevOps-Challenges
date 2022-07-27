@@ -1,0 +1,85 @@
+---
+  - hosts: localhost
+    become: true    
+# You probably need sudo. You probably need to be become: yes 
+# another way is to pass in -K  e.g ansible-playbook name.yml -K
+    tasks:
+      - name: Add the Three group --> management, sales and operation
+        ansible.builtin.group:
+          name: "{{ item }}"
+          state: present
+        with_items:
+          - management
+          - sales
+          - operation
+
+      - name: add the new user to management, sales and operation
+        ansible.builtin.user: 
+          name: "{{ item }}"
+          state: present
+          groups: management, sales, operation
+          append: yes
+        with_items:
+          - jen
+          - william
+
+      - name: add the new user to sales
+        ansible.builtin.user:
+          name: "{{ item }}"
+          state: present
+          groups: sales
+          append: yes
+        with_items:
+          - matt
+          - sam
+          - anne
+          - danny
+
+      - name: add the new user to operations
+        ansible.builtin.user: 
+          name: "{{ item }}"
+          state: present
+          groups: operation
+          append: yes
+        with_items:
+          - kate
+          - bruce
+
+      - name: Verify the user have add to correct group
+        shell: groups jen william matt sam anne danny kate bruce
+        register: group_user_verification
+
+      - debug: 
+          msg: "{{ group_user_verification.stdout_lines }}"
+
+      - name: Delete user
+        ansible.builtin.user:
+          name: "{{ item }}"
+          state: absent
+        with_items:
+          - jen
+          - william
+          - matt
+          - sam
+          - anne
+          - danny
+          - kate
+          - bruce
+          
+      - name: Delete group
+        ansible.builtin.group:
+          name: "{{ item }}"
+          state: absent
+        with_items:
+          - management
+          - sales
+          - operation
+
+
+
+       
+
+
+
+       
+      
