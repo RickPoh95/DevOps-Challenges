@@ -1,0 +1,135 @@
+--- 
+  - hosts: localhost
+    become: true 
+    become_method: sudo
+# You probably need sudo. You probably need to be become: yes. Another way is to pass in -K  e.g ansible-playbook name.yml -K
+    vars:
+      ansible_become_pass: <your_sudo_password>
+      directory:
+        - /home/bill/
+        - /home/susan/
+        - /home/juan/
+
+      lock_user: #set variable for user account that need to be lock
+        - bill
+        - susan
+        - juan
+
+      newuser: #set variable for user account that need to be create
+        - nancy
+        - greg
+        - jeremy
+
+      boss_level:
+        - jason
+        - jason
+        - sally
+
+    tasks: 
+#create user and group
+      - name: create user account with both lock and new
+        user: 
+          name: "{{ item }}"
+          state: present
+          append: yes
+        with_items: "{{ lock_user + newuser + boss_level }}"
+
+      - name: create group with both lock and new
+        group: 
+          name: "{{ item }}"
+          state: present
+        with_items: "{{ lock_user + newuser + boss_level }}"
+#verify the directory is made with correct ownership assign
+      - name: Verify the directory ownership
+        shell: ls -al /home/
+        register: ownership
+      - debug:
+          msg: "{{ ownership.stdout_lines }}"
+#lock user that left the company
+      - name: lock the lock user (bill, susan, juan)
+        user:
+          name: "{{ item }}"
+          password_lock: yes
+        loop: "{{ lock_user }}"
+#change ownership of directory to new staff that supervise under manager
+      - name: Change the ownership of bill directory to nancy and jason and follow by another two group
+        file: 
+          path: "{{ item[0] }}"
+          state: directory
+          recurse: yes
+          owner: "{{ item[1] }}"
+          group: "{{ item[2] }}"
+          mode: 0755
+        loop: "{{ directory |zip(newuser,boss_level) |list }}"
+
+      - name: Verify the updated directory ownership
+        shell: ls -al /home/
+        register: update_ownership
+      - debug:
+          msg: "{{ update_ownership.stdout_lines }}"
+#check nancy write permission (use sudo ansible-playbook <file_name.yaml>)
+      - name: Check Nancy have write permission by create a line into add_file
+        become: yes
+        become_user: nancy
+        block:
+          - lineinfile:
+              path: /home/bill/add_file
+              line: nancy can add & modified file in ex-bill directory
+              create: yes
+          - shell: cat /home/bill/add_file
+            register: check_content
+          - debug:
+              msg: "{{ check_content.stdout_lines }}"
+        
+#delete the user, group and directory that create early
+      - name: delete user account with both lock and new
+        user: 
+          name: "{{ item }}"
+          state: absent
+          remove: true
+        with_items: "{{ lock_user + newuser + boss_level }}"
+        ignore_errors: yes
+
+      - name: delete group with both lock and new
+        group: 
+          name: "{{ item }}"
+          state: absent
+        with_items: "{{ lock_user + newuser + boss_level }}"
+
+      - name : delete directory that create early
+        file: 
+          path: "{{ item }}"
+          state: absent
+        loop: "{{ directory }}"
+
+#check everthing delete properly
+      - name: make sure all the document delete
+        shell: ls -a /home/
+        register: double_check
+      - debug:
+          var: double_check.stdout_lines
+        
+      - name: Check if users and groups still exists #task05
+        shell: "cat /etc/{{ item }}"
+        register: users_groups
+        loop:
+          - passwd
+          - group
+      - debug:
+          var: users_groups
+
+
+
+
+
+       
+
+    
+          
+          
+
+
+
+
+
+
