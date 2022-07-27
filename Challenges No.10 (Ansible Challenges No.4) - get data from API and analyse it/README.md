@@ -35,10 +35,12 @@
 
 ### Command to execute before execute bryan-panda
 * Remember to install this two items before run bryan-panda.yml
-  >sudo apt install zip
-
-  >python3 -m pip install pandas
-
+```
+sudo apt install zip
+```
+```
+python3 -m pip install pandas
+```
 
 Further Reading:
  
