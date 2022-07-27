@@ -1,0 +1,35 @@
+# lab5 with pandas
+---
+- hosts: localhost
+  tasks:
+    - name: download uni data from data.gov,sg
+      get_url:
+        url: https://data.gov.sg/dataset/249f1149-1e04-40e2-81c6-bfab3bba5574/download
+        dest: ./unidata.zip
+        mode: '0600'
+
+    - name: download poly data from data.gov,sg
+      get_url:
+        url: https://data.gov.sg/dataset/f6048a81-0f7b-436c-8bfa-ebe1bb42cfdc/download
+        dest: ./polydata.zip
+        mode: '0600'     
+    
+    - name: unzip uni data to get csv
+      unarchive:
+        src: ./unidata.zip
+        dest: ./
+        remote_src: yes
+
+    - name: unzip poly data to get csv
+      unarchive:
+        src: ./polydata.zip
+        dest: ./
+        remote_src: yes
+
+    - name: run python pandas script to combine and filter csv files
+      script: ./readcsv.py
+      args:
+        executable: python3
+      register: finaloutput
+    - debug:
+        var: finaloutput.stdout_lines
