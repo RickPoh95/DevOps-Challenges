@@ -59,7 +59,7 @@
   <img src="./Photo/Push%20File%20to%20Gitlab.png" width="350" title="secure with lock">
 
 13. Delete all the resources in resources group by using the terraform comment:
-    * `terraform init -auto-approve`
+    * `terraform destroy -auto-approve`
 
 ### Reference
 
