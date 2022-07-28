@@ -33,13 +33,13 @@
 
 7. After complete `terraform apply -auto-approve`, wait for 1-2 minute and press Refresh button to check the resources that add to Azure resources group.
 <p align="center">
-  <img src="./ResourcesGroup.png" width="400" title="private connection">
+  <img src="./ResourcesGroup.png" width="600" title="private connection">
 
 8. SKU and vm_size need to be the same. For this exercise,
-Sizes that SKU can use: 
-   > ["Standard_A0","Standard_B2ms","Standard_B2s","Standard_D1_v2","Standard_DS1","Standard_DS1_v2","Standard_DS2_v2","Standard_D2","Standard_D2_v3","Standard_D2s_v3","Standard_F2","Standard_F2s_v2"]
+   Sizes that SKU can use: 
+  > ["Standard_A0","Standard_B2ms","Standard_B2s","Standard_D1_v2","Standard_DS1","Standard_DS1_v2","Standard_DS2_v2","Standard_D2","Standard_D2_v3","Standard_D2s_v3","Standard_F2","Standard_F2s_v2"]
 
-* Sizes that vm_size can use:
+  Sizes that vm_size can use:
   > ["standard_b1ms","standard_b2ms","standard_b2s","standard_b1s","standard_a0","standard_d2","standard_d1_v2","standard_ds1","standard_ds1_v2","standard_a1_v2","standard_f2","standard_ds3_v2","standard_d2s_v3"]
 
 
