@@ -1,0 +1,151 @@
+# Step By Step Guide to install Autolab Documentation in Ubuntu 2.0
+#############################################################################################################################################
+sudo apt-get update  (# Upgrade system packages and installing prerequisites) - DONE
+sudo apt-get upgrade - DONE
+sudo apt install git curl libssl-dev libreadline-dev zlib1g-dev autoconf bison build-essential libyaml-dev libreadline-dev libncurses5-dev libffi-dev libgdbm-dev -DONE
+sudo apt-get install libmysqlclient-dev - DONE
+sudo apt-get install vim -DONE
+cd ~/   (# Cloning Autolab repo from Github to ~/Autolab) - DONE
+git clone https://github.com/autolab/Autolab.git - DONE
+curl -fsSL https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-installer | sudo bash (# Setting up rbenv and ruby-build plugin) -DONE
+##############################################################################################################################################
+Installing rbenv with git...
+Initialized empty Git repository in /root/.rbenv/.git/
+Updating origin
+remote: Enumerating objects: 2960, done.
+remote: Counting objects: 100% (117/117), done.
+remote: Compressing objects: 100% (66/66), done.
+remote: Total 2960 (delta 62), reused 91 (delta 51), pack-reused 2843
+Receiving objects: 100% (2960/2960), 577.31 KiB | 956.00 KiB/s, done.
+Resolving deltas: 100% (1850/1850), done.
+From https://github.com/rbenv/rbenv
+ * [new branch]      master     -> origin/master
+ * [new tag]         v0.1.0     -> v0.1.0
+ * [new tag]         v0.1.1     -> v0.1.1
+ * [new tag]         v0.1.2     -> v0.1.2
+ * [new tag]         v0.2.0     -> v0.2.0
+ * [new tag]         v0.2.1     -> v0.2.1
+ * [new tag]         v0.3.0     -> v0.3.0
+ * [new tag]         v0.4.0     -> v0.4.0
+ * [new tag]         v1.0.0     -> v1.0.0
+ * [new tag]         v1.1.0     -> v1.1.0
+ * [new tag]         v1.1.1     -> v1.1.1
+ * [new tag]         v1.1.2     -> v1.1.2
+ * [new tag]         v1.2.0     -> v1.2.0
+Branch 'master' set up to track remote branch 'master' from 'origin'.
+Already on 'master'
+make: Entering directory '/root/.rbenv/src'
+gcc -fPIC     -c -o realpath.o realpath.c
+gcc -shared -Wl,-soname,../libexec/rbenv-realpath.dylib  -o ../libexec/rbenv-realpath.dylib realpath.o 
+make: Leaving directory '/root/.rbenv/src'
+
+Installing ruby-build with git...
+Cloning into '/root/.rbenv/plugins/ruby-build'...
+remote: Enumerating objects: 12227, done.
+remote: Counting objects: 100% (920/920), done.
+remote: Compressing objects: 100% (317/317), done.
+remote: Total 12227 (delta 624), reused 801 (delta 543), pack-reused 11307
+Receiving objects: 100% (12227/12227), 2.55 MiB | 1.27 MiB/s, done.
+Resolving deltas: 100% (8091/8091), done.
+
+All done!
+Note that this installer does NOT edit your shell configuration files:
+1. You'll want to ensure that `~/.rbenv/bin' is added to PATH.
+2. Run `rbenv init' to view instructions on how to configure rbenv for your shell.
+3. Launch a new terminal window after editing shell configuration files.
+4. (Optional) Run the doctor command to verify the installation:
+   wget -q "https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-doctor" -O- | bash
+############################################################################################################################################
+echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc - DONE
+echo 'eval "$(rbenv init -)"' >> ~/.bashrc - DONE
+sudo apt install rbenv - DONE
+source ~/.bashrc - DONE
+git clone https://github.com/rbenv/ruby-build.git - DONE
+PREFIX=/usr/local sudo ./ruby-build/install.sh - DONE
+cd Autolab - DONE 
+rbenv install `cat .ruby-version` (#Installing Ruby with ruby-build, choose your own version) - DONE
+rbenv global `cat .ruby-version` - DONE 
+sudo apt-get install sqlite3 libsqlite3-dev - DONE
+echo "gem: --no-document" > ~/.gemrc (#Working with Gems) - DONE
+gem install bundler - DONE
+gem install rails -v 6.1.4.1 (#Installing Rails) - DONE
+rbenv rehash - DONE
+bundle install -DONE
+cp config/database.yml.template config/database.yml (#Initializing Autolab Configs) -DONE
+cp config/school.yml.template config/school.yml - DONE
+cp config/autogradeConfig.rb.template config/autogradeConfig.rb -DONE
+cp .env.template .env (# Create a .env file to store Autolab configuration constants) - DONE
+./bin/initialize_secrets.sh (# Initialize application secrets)
+### (Using SQLite) Editing Database YML. Comment out the configurations meant for MySQL in config/database.yml, and insert the following - DONE
+development:
+    adapter: sqlite3
+    database: db/autolab_development
+    pool: 5
+    timeout: 5000
+
+test:
+    adapter: sqlite3
+    database: db/autolab_test
+    pool: 5
+    timeout: 5000
+###########################################################################################################################################
+bundle exec rails db:create (# Initializing Autolab Database) - DONE
+bundle exec rails db:reset - DONE
+bundle exec rails db:migrate - DONE
+./bin/initialize_user.sh -d (# For development) -DONE
+##############################################################################################################################################
+############## Initialize a new root user ##############
+User Email: 
+Password: 
+Confirm Password: 
+First Name: 
+Last Name: 
+Successfully created root user with email your@email.com
+###########################################################################################################################################
+bundle exec rails autolab:populate (# If you are just testing Autolab, you can populate the database with sample course & students) - DONE
+bundle exec rails s -p 3000 --binding=0.0.0.0 (# Run Autolab!) - DONE (COMPLETE !!!)
+ps -aux | grep redis-server/rails-server
+kill -9 <server no>
+##### Email: "admin@foo.bar"
+###########################################################################################################################################
+
+# (Skip THIS AND ONLY USING SQLite) Installing MySQL. (If you would just like to test Autolab, then you can skip this step by using SQLite) Following instructions from How to Install MySQL on Ubuntu. (Not able to proceed this due to don't have Docker-Ubuntu Desktop Root Password)
+sudo apt install mysql-server
+sudo mysql_secure_installation
+
+password for root user: dockerchallengesautolab
+
+> There will be a few questions asked during the MySQL setup.
+
+* Validate Password Plugin? N
+* Remove Annonymous Users? Y
+* Disallow Root Login Remotely? Y
+* Remove Test Database and Access to it? Y
+* Reload Privilege Tables Now? Y
+##############################################################################################################################################
+# Step By Step Guide to install Tango in Ubuntu 2.0
+git clone https://github.com/autolab/Tango.git; cd Tango (# Obtain the source code and get in to Tangos file)
+curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg (# Install Redis)
+echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+sudo apt-get update
+sudo apt-get install redis
+cp config.template.py config.py (# Create a config.py file from the given template.)
+mkdir courselabs (# Create the course labs directory where job's output files will go, organized by key and lab name)
+sudo apt update (# Installing Docker)
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+apt-cache policy docker-ce
+sudo apt install docker-ce
+sudo apt install python3-pip (install pip)
+pip install virtualenv (# Run the following commands to setup the Tango dev environment inside the Tango directory. Install pip if needed.)
+virtualenv .
+source bin/activate (exit virtual environment --> deactivate)
+pip install -r requirements.txt
+mkdir volumes
+DOCKER_VOLUME_PATH = "/root/Autolab/Tango/volumes/" (add this to config.py in tango virtual env)
+redis-server  (Start Redis) (ps -aux | grep redis-server) (kill -9 <port>)
+python restful_tango/server.py 3001 (start the server (producer)) (New Terminal)(No.2)
+python jobManager.py (New Terminal)(No.3)
+curl localhost:3001  (New Terminal)(No.4)
+cp config/autogradeConfig.rb.template config/autogradeConfig.rb
