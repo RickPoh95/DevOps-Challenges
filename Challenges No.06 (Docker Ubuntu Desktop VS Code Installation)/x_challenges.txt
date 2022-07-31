@@ -1,13 +1,13 @@
 #create a repo (mkdir <FILENAME>) #create a repo to insert dockerfile
 #cd <FILENAME>
 #vim dockerfile (insert the following command line, the command to build the container environment with the images)
-#docker build . (build the docker images)
+#docker build . (build the docker images) --> docker build -t <REPOSITORY_NAME>:<TAG> .
 #docker images  (check the available docker images)
 #docker container run <repo name> (will pull the images automatically from docker hub to build the container)
 #docker container run -it --name <container name> <images ID> (i for interactive, -t so that we can allocate a sudo TTY)(--name flag to name our container)(images ID can just show the first few characters)
 #exit (exit from container)
 #docker container ls -a (container that stop running)
-#docker container ls (check the active container)
+#docker container ls / docker ps(check the active container)
 #docker container start <container ID> or <container name> (start and run the container)
 #docker attach <container ID> or <container name> (enter the container)
 #docker stop <container ID> or <container name> (stop the container)
@@ -22,6 +22,95 @@
 #elinks <IPAddress>:<PORT no>
 #docker container run -d -P <container name> (open IP local port, random port assign --> the ephemeral port range,typically a port between 32768 and 61000)
 #docker container run -d -p 80:80 <container name> (assign the port to 80:80)
+####PORT MAPPING#############
+#docker run -d -p <PORT_NO>:80 (Ex:6080 or 8099) <images_repo_name>
+#ip addr (get the ip addr and <ip:port_no>
+######Volume Mapping########### (When your restart a container all data will be removed.So to avoid that, your should perform volume mapping.)
+1. Create a folder as storage on your local machine --> mkdir -p /var/lib/docker-desktop/disk02 (check you local machine part)
+2. docker run --name nginxmounted2 -it -v /var/lib/docker/disk02:/mnt nginx /bin/bash
+   docker run --name <new_con_name> -it -v /var/lib/docker/disk02:<link_to_mount_directory> nginx /bin/bash
+
+Method 2 
+1. docker volume create volume01 
+2. docker volume ls
+3. docker volume inspect volume01
+4. # docker run -d -v volume01:/mnt2 nginx (-d run at background)(-v volume) --> sample No.1
+   # docker run --name mycontainer2 -it -v volume01:/mnt nginx /bin/bash --> sample No.1
+
+To remove volumes, do like follows
+#docker volume rm volume01
+
+#######Docker Networking################ (Refer to the image in Extra Learning folder)
+#docker network ls (To list all networks used)
+#docker network create --driver bridge --subnet 198.168.10.0/24 my-custom-net (this command permit to create a now network)
+#docker run -d --network=my-custom-net --name myngin01 nginx (To run an container under a network) (By default the port run for container is port 80)
+You may check via container ip via the following command --> curl <ip:80>
+#docker run -d --network host --name my_nginx05 nginx (Run container with network host, default is port 80)
+
+########Docker Compose###############################
+Is a tool to define and run multiple container
+Let's see this voting app based on.
+Manually 
+-----------------------------------------------------------------------------------------------
+$docker run -d --name=redis redis
+$docker run -d --name db -e POSTGRES_HOST_AUTH_METHOD=trust postgres:9.4
+$docker run -d --name=vote -p 5000:80 --link=redis:redis eesprit/voting-app-vote
+$docker run -d --name=result -p 5001:80 --link=db:db eesprit/voting-app-result
+$docker run -d --name=worker --link=redis:redis --link=db:db eesprit/voting-app-worker
+------------------------------------------------------------------------------------------------
+Install Docker Compose using YAML file
+#apt -y install docker-compose
+#more docker-compose.yml
+Content of the YAML file
+------------------------------------------------------------------------------------------------
+version: "2"
+services:
+  vote:
+    image: eesprit/voting-app-vote
+    ports:
+      - 5000:80
+    links:
+      - redis
+
+  redis:
+    container_name: redis
+    image: redis:alpine
+
+
+  worker:
+    container_name: worker
+    image: eesprit/voting-app-worker
+    links:
+     - redis
+     - db
+
+  db:
+    container_name: db
+    image: postgres:9.4
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  result:
+    container_name: result
+    image: eesprit/voting-app-result
+    ports:
+      - 5001:80
+    links:
+      - db
+
+	
+#docker-compose up -d
+-----------------------------------------------
+
+######################Docker Swam############################################### (Refer to Docker Swarm TXT file)
+What will happen when your host or your container engine failed ? How your app will continue to deliver the service.
+That where Docker SWARM comes to play.
+Docker SWARM is a tool that handle container orchestration through high availability, the scalability, replication, health monitoring
+
+It combine many docker engine in a cluster.
+#apt -y install docker.io 
+#docker swarm init --advertise-addr HOST_IP --listen-addr 0.0.0.0 (Install the swarm manager)
+
 
 FROM dorowu/ubuntu-desktop-lxde-vnc:latest
 EXPOSE 6080:80
